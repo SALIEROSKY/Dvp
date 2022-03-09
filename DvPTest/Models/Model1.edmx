@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="testworkModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Personas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="numeric" Precision="38" Scale="0" Nullable="false" />
+          <Property Name="Nombres" Type="varchar" MaxLength="38" Nullable="false" />
+          <Property Name="Apellido" Type="varchar" MaxLength="38" Nullable="false" />
+          <Property Name="Tipo_Identi" Type="varchar" MaxLength="38" Nullable="false" />
+          <Property Name="No_Ide" Type="varchar" MaxLength="38" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="38" Nullable="false" />
+          <Property Name="Fecha_crea" Type="date" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'testwork.dbo.Usuario' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Usuario" />
+            <PropertyRef Name="Pass" />
+            <PropertyRef Name="Fecha_crea" />
+          </Key>
+          <Property Name="Id" Type="numeric" Precision="38" Scale="0" Nullable="false" />
+          <Property Name="Usuario" Type="varchar" MaxLength="38" Nullable="false" />
+          <Property Name="Pass" Type="varchar" MaxLength="38" Nullable="false" />
+          <Property Name="Fecha_crea" Type="date" Nullable="false" />
+        </EntityType>
+        <Association Name="Usuario_fk0">
+          <End Role="Personas" Type="Self.Personas" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="testworkModelStoreContainer">
+          <EntitySet Name="Personas" EntityType="Self.Personas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Usuario].[Id] AS [Id], 
+    [Usuario].[Usuario] AS [Usuario], 
+    [Usuario].[Pass] AS [Pass], 
+    [Usuario].[Fecha_crea] AS [Fecha_crea]
+    FROM [dbo].[Usuario] AS [Usuario]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="Usuario_fk0" Association="Self.Usuario_fk0">
+            <End Role="Personas" EntitySet="Personas" />
+            <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="testworkModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Decimal" Precision="38" Scale="0" Nullable="false" />
+          <Property Name="Nombres" Type="String" MaxLength="38" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Apellido" Type="String" MaxLength="38" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Tipo_Identi" Type="String" MaxLength="38" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="No_Ide" Type="String" MaxLength="38" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="38" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Fecha_crea" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.Usuario_fk0" FromRole="Personas" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Usuario1" />
+            <PropertyRef Name="Pass" />
+            <PropertyRef Name="Fecha_crea" />
+          </Key>
+          <Property Name="Id" Type="Decimal" Precision="38" Scale="0" Nullable="false" />
+          <Property Name="Usuario1" Type="String" MaxLength="38" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Pass" Type="String" MaxLength="38" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Fecha_crea" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Persona" Relationship="Self.Usuario_fk0" FromRole="Usuario" ToRole="Personas" />
+        </EntityType>
+        <Association Name="Usuario_fk0">
+          <End Role="Personas" Type="Self.Persona" Multiplicity="1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Personas">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="testworkEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Personas" EntityType="Self.Persona" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuario" />
+          <AssociationSet Name="Usuario_fk0" Association="Self.Usuario_fk0">
+            <End Role="Personas" EntitySet="Personas" />
+            <End Role="Usuario" EntitySet="Usuarios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="testworkModelStoreContainer" CdmEntityContainer="testworkEntities">
+          <EntitySetMapping Name="Personas">
+            <EntityTypeMapping TypeName="testworkModel.Persona">
+              <MappingFragment StoreEntitySet="Personas">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nombres" ColumnName="Nombres" />
+                <ScalarProperty Name="Apellido" ColumnName="Apellido" />
+                <ScalarProperty Name="Tipo_Identi" ColumnName="Tipo_Identi" />
+                <ScalarProperty Name="No_Ide" ColumnName="No_Ide" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Fecha_crea" ColumnName="Fecha_crea" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="testworkModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Usuario1" ColumnName="Usuario" />
+                <ScalarProperty Name="Pass" ColumnName="Pass" />
+                <ScalarProperty Name="Fecha_crea" ColumnName="Fecha_crea" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
